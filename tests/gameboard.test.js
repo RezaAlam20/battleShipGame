@@ -45,3 +45,9 @@ test("place ship outside the board", () => {
   testBoard.placeShip(6, 10, new Ship(5));
   expect(testBoard.showShip(6, 10)).toBeFalsy();
 });
+
+test("place ships on each other", () => {
+  testBoard.placeShip(3, 1, new Ship(3));
+  testBoard.placeShip(2, 2, new Ship(4), "vertical");
+  expect(testBoard.showShip(4, 2)).toBeFalsy();
+});
