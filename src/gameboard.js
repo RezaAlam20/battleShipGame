@@ -7,26 +7,35 @@ class Gameboard {
   }
   placeShip(x, y, ship, mode = "horizontal") {
     if (mode == "horizontal") {
+      let available = true;
       if (y + ship.length > 9) {
         return false;
       }
-      if (
-        this.board[x][y] == undefined &&
-        this.board[x][y + ship.length] == undefined // might cause bugs not cheking the middle
-      ) {
+
+      for (let i = 0; i < ship.length; i++) {
+        if (this.board[x][y + i] != undefined) {
+          available = false;
+          break;
+        }
+      }
+      if (available) {
         for (let i = 0; i < ship.length; i++) {
           this.board[x][y + i] = ship;
         }
         return true;
       }
     } else if (mode == "vertical") {
+      let available = true;
       if (x + ship.length > 9) {
         return false;
       }
-      if (
-        this.board[x][y] == undefined &&
-        this.board[x + ship.length][y] == undefined
-      ) {
+      for (let i = 0; i < ship.length; i++) {
+        if (this.board[x + i][y] != undefined) {
+          available = false;
+          break;
+        }
+      }
+      if (available) {
         for (let i = 0; i < ship.length; i++) {
           this.board[x + i][y] = ship;
         }
