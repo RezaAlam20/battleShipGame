@@ -19,7 +19,6 @@ let input = document.querySelector("#input");
 let resetBtn = document.querySelector(".resetBtn");
 
 let gameState = "prep"; //prep , ingame , end
-
 function startGame() {
   currTurn = player1;
   resetDom();
@@ -154,7 +153,22 @@ resetBtn.addEventListener("click", () => {
 });
 
 function comp() {
-  let comchoice = Math.floor(Math.random() * 100);
+  let lost = player1.gameboard.allSunk();
+  if (lost) {
+    gameState = "end";
+    endGame();
+    declarewinner(player2);
+    return;
+  }
+  let compx = Math.floor(Math.random() * 10);
+  let compy = Math.floor(Math.random() * 10);
+  let square = document.querySelector(`#c${compx}${compy}`);
+  if (square.textContent != "×" || square.textContent != "○") {
+    player1.gameboard.receiveAttack(compx, compy);
+    square.textContent = "×";
+  } else {
+    comp();
+  }
 }
 
 windowTexts();
