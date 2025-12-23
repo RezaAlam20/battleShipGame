@@ -1,4 +1,4 @@
-import { dom } from "./dom.js";
+import { dom, showHits } from "./dom.js";
 import { Ship } from "./ship.js";
 import { Player } from "./player.js";
 import { resetDom } from "./dom.js";
@@ -6,7 +6,7 @@ import { showShips } from "./dom.js";
 dom();
 
 let player1 = new Player("human", "player1");
-let player2 = new Player("human", "player2");
+let player2 = new Player("human", "Computer");
 
 let firstGrid = document.querySelector(".firstGrid");
 let secondGrid = document.querySelector(".secondGrid");
@@ -16,6 +16,7 @@ let content = document.querySelector(".content");
 let randomBtn = document.querySelector(".randomBtn");
 let sumbit = document.querySelector(".submitBtn");
 let input = document.querySelector("#input");
+let resetBtn = document.querySelector(".resetBtn");
 
 let gameState = "prep"; //prep , ingame , end
 
@@ -32,16 +33,18 @@ function startGame() {
 
 firstGrid.addEventListener("click", (e) => {
   if (gameState == "ingame") {
+    if (e.target.textContent == "×" || e.target.textContent == "○") {
+      return;
+    }
     if (currTurn == player2) {
       let coords = e.target.id;
       let split = coords.split("");
       player1.gameboard.receiveAttack(split[1], split[2]);
-      console.log(player1.gameboard.showShip(split[1], split[2]));
       e.target.textContent = "×";
-      console.log(player1.gameboard.board);
       turnAlternate();
       let lost = player1.gameboard.allSunk();
       showShips(player1);
+      showHits(player1, e);
 
       if (lost) {
         gameState = "end";
@@ -54,14 +57,17 @@ firstGrid.addEventListener("click", (e) => {
 
 secondGrid.addEventListener("click", (e) => {
   if (gameState == "ingame") {
+    if (e.target.textContent == "×" || e.target.textContent == "○") {
+      return;
+    }
     if (currTurn == player1) {
       let coords = e.target.id;
       let split = coords.split("");
       player2.gameboard.receiveAttack(split[1], split[2]);
-      console.log(player2.gameboard.showShip(split[1], split[2]));
       e.target.textContent = "×";
       turnAlternate();
       showShips(player1);
+      showHits(player2, e);
 
       let lost = player2.gameboard.allSunk();
       if (lost) {
@@ -75,7 +81,7 @@ secondGrid.addEventListener("click", (e) => {
 
 startBtn.addEventListener("click", () => {
   if (player1.gameboard.shipCount() < 14) {
-    console.log("place more ships ");
+    alert("place some ships");
   } else {
     startGame();
   }
@@ -139,4 +145,16 @@ sumbit.addEventListener("click", (e) => {
     }
   }
 });
+
+resetBtn.addEventListener("click", () => {
+  player1.gameboard.resetBoard();
+  player2.gameboard.resetBoard();
+  resetDom();
+  gameState = "prep";
+});
+
+function comp() {
+  let comchoice = Math.floor(Math.random() * 100);
+}
+
 windowTexts();
