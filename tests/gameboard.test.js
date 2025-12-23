@@ -51,3 +51,8 @@ test("place ships on each other", () => {
   testBoard.placeShip(2, 2, new Ship(4), "vertical");
   expect(testBoard.showShip(4, 2)).toBeFalsy();
 });
+
+test("reset ships hitcounts", () => {
+  testBoard.resetBoard();
+  expect(testBoard.showShip(6, 8)).toBe(undefined);
+});
