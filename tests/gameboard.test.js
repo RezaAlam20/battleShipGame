@@ -1,4 +1,4 @@
-import { testBoard } from "../src/gameboard";
+import { Gameboard, testBoard } from "../src/gameboard";
 import { Ship } from "../src/ship";
 
 test("placeholder", () => {
@@ -55,4 +55,12 @@ test("place ships on each other", () => {
 test("reset ships hitcounts", () => {
   testBoard.resetBoard();
   expect(testBoard.showShip(6, 8)).toBe(undefined);
+});
+
+test("ship count", () => {
+  let board = new Gameboard();
+  board.placeRandomShip();
+  expect(board.shipCount()).toBe(14); // counting the squares
+  board.resetBoard();
+  expect(board.shipCount()).toBe(0);
 });
