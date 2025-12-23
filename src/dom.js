@@ -79,5 +79,21 @@ function showShips(player) {
   }
 }
 
+function showHits(player, event) {
+  let board = player.gameboard.board;
+  let id = event.target.id;
+  let split = id.split("");
+  // if there is a ship its truthy
+  if (board[split[1]][split[2]]) {
+    event.target.textContent = "○";
+  }
+}
+
+let resetBtn = document.createElement("div");
+resetBtn.classList.add("btn");
+resetBtn.classList.add("resetBtn");
+resetBtn.textContent = "Reset Board";
+container.appendChild(resetBtn);
+export { showHits };
 export { showShips };
 export { resetDom };
