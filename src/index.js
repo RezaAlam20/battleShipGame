@@ -16,13 +16,13 @@ let secondGrid = document.querySelector(".secondGrid");
 let currTurn = undefined;
 let startBtn = document.querySelector(".startBtn");
 let content = document.querySelector(".content");
+let randomBtn = document.querySelector(".randomBtn");
+let sumbit = document.querySelector(".submitBtn");
+let input = document.querySelector("#input");
 
 function startGame() {
   currTurn = player1;
   resetDom();
-  player1.gameboard.resetBoard();
-  player2.gameboard.resetBoard();
-  player1.gameboard.placeRandomShip();
   player2.gameboard.placeRandomShip();
   placetestShips();
   turnAlternate();
@@ -41,6 +41,7 @@ firstGrid.addEventListener("click", (e) => {
     let lost = player1.gameboard.allSunk();
 
     if (lost) {
+      endGame();
       declarewinner(player2);
     }
   } else return;
@@ -57,13 +58,18 @@ secondGrid.addEventListener("click", (e) => {
 
     let lost = player2.gameboard.allSunk();
     if (lost) {
+      endGame();
       declarewinner(player1);
     }
   } else return;
 });
 
 startBtn.addEventListener("click", () => {
-  startGame();
+  if (player1.gameboard.shipCount() < 14) {
+    console.log("place more ships ");
+  } else {
+    startGame();
+  }
 });
 
 let firstWindow = document.querySelector("#firstWin");
@@ -85,11 +91,37 @@ function declarewinner(player) {
   winnerDiv.textContent = `${player.name} is the winner`;
   winnerDiv.classList.add("winner");
   content.appendChild(winnerDiv);
-
-  currTurn = undefined;
 }
 function windowTexts() {
   firstWindow.textContent = `${player1.name}`;
   secondWindow.textContent = `${player2.name}`;
 }
+
+function endGame() {
+  currTurn = undefined;
+  player1.gameboard.resetBoard();
+  player2.gameboard.resetBoard();
+}
+
+randomBtn.addEventListener("click", () => {
+  player1.gameboard.placeRandomShip();
+});
+
+sumbit.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (player1.gameboard.shipCount() >= 14) {
+    return;
+  } else {
+    let value = input.value;
+    let split = value.split(",");
+
+    player1.gameboard.placeShip(
+      parseInt(split[0]),
+      parseInt(split[1]),
+      new Ship(parseInt(split[2])),
+      "horizontal"
+    );
+    console.log(player1.gameboard.board);
+  }
+});
 windowTexts();
