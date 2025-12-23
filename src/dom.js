@@ -3,6 +3,7 @@ let content = document.querySelector(".content");
 let nav = document.querySelector("nav");
 let firstGrid = document.querySelector(".firstGrid");
 let secondGrid = document.querySelector(".secondGrid");
+let container = document.querySelector(".container");
 createGrid(firstGrid);
 createGrid(secondGrid);
 function createGrid(grid) {
@@ -10,7 +11,7 @@ function createGrid(grid) {
     for (let j = 0; j < 10; j++) {
       let div = document.createElement("div");
       div.classList.add("cell");
-      div.id = `${i}${j}`;
+      div.id = `c${i}${j}`;
       grid.appendChild(div);
     }
   }
@@ -18,6 +19,7 @@ function createGrid(grid) {
 
 let startBtn = document.createElement("btn");
 startBtn.classList.add("startBtn");
+startBtn.classList.add("btn");
 startBtn.textContent = "Start Game";
 
 let firstWindow = document.createElement("div");
@@ -29,10 +31,9 @@ secondWindow.classList.add("window");
 secondWindow.id = "secondWin";
 
 nav.appendChild(firstWindow);
-nav.appendChild(startBtn);
+container.appendChild(startBtn);
 nav.appendChild(secondWindow);
 
-let winner = document.querySelector(".winner");
 function resetDom() {
   while (firstGrid.firstElementChild) {
     firstGrid.removeChild(firstGrid.firstElementChild);
@@ -45,4 +46,38 @@ function resetDom() {
   createGrid(secondGrid);
 }
 
+let randomBtn = document.createElement("div");
+randomBtn.textContent = "Random Ships";
+randomBtn.classList.add("btn");
+randomBtn.classList.add("randomBtn");
+container.appendChild(randomBtn);
+
+let input = document.createElement("div");
+
+input.innerHTML = `       <form action="">
+      <label for="name"> place Ships
+        <input type="text" placeholder="row,column,length" id=input />
+      </label>
+      <button type="submit" class="submitBtn">submit</button>
+    </form>`;
+
+input.classList.add(".placeShip");
+content.appendChild(input);
+
+function showShips(player) {
+  let board = player.gameboard.board;
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board.length; j++) {
+      if (board[i][j] == undefined) {
+        let square = firstGrid.querySelector(`#c${i}${j}`);
+        square.style.backgroundColor = " rgb(101, 101, 101)";
+      } else if (board[i][j] != undefined || board[i][j] != null) {
+        let square = firstGrid.querySelector(`#c${i}${j}`);
+        square.style.backgroundColor = "red";
+      }
+    }
+  }
+}
+
+export { showShips };
 export { resetDom };
