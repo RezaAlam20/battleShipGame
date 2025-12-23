@@ -24,7 +24,9 @@ let firstWindow = document.createElement("div");
 let secondWindow = document.createElement("div");
 
 firstWindow.classList.add("window");
+firstWindow.id = "firstWin";
 secondWindow.classList.add("window");
+secondWindow.id = "secondWin";
 
 nav.appendChild(firstWindow);
 nav.appendChild(startBtn);
