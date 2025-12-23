@@ -2,7 +2,7 @@ import { dom } from "./dom.js";
 import { Ship } from "./ship.js";
 import { Player } from "./player.js";
 import { resetDom } from "./dom.js";
-
+import { showShips } from "./dom.js";
 dom();
 
 let player1 = new Player("human", "player1");
@@ -27,18 +27,20 @@ function startGame() {
   placetestShips();
   turnAlternate();
   windowTexts();
+  showShips(player1);
 }
 
 firstGrid.addEventListener("click", (e) => {
   if (currTurn == player2) {
     let coords = e.target.id;
     let split = coords.split("");
-    player1.gameboard.receiveAttack(split[0], split[1]);
-    console.log(player1.gameboard.showShip(split[0], split[1]));
+    player1.gameboard.receiveAttack(split[1], split[2]);
+    console.log(player1.gameboard.showShip(split[1], split[2]));
     e.target.textContent = "×";
     console.log(player1.gameboard.board);
     turnAlternate();
     let lost = player1.gameboard.allSunk();
+    showShips(player1);
 
     if (lost) {
       endGame();
@@ -51,10 +53,11 @@ secondGrid.addEventListener("click", (e) => {
   if (currTurn == player1) {
     let coords = e.target.id;
     let split = coords.split("");
-    player2.gameboard.receiveAttack(split[0], split[1]);
-    console.log(player2.gameboard.showShip(split[0], split[1]));
+    player2.gameboard.receiveAttack(split[1], split[2]);
+    console.log(player2.gameboard.showShip(split[1], split[2]));
     e.target.textContent = "×";
     turnAlternate();
+    showShips(player1);
 
     let lost = player2.gameboard.allSunk();
     if (lost) {
@@ -105,6 +108,7 @@ function endGame() {
 
 randomBtn.addEventListener("click", () => {
   player1.gameboard.placeRandomShip();
+  showShips(player1);
 });
 
 sumbit.addEventListener("click", (e) => {
@@ -121,7 +125,7 @@ sumbit.addEventListener("click", (e) => {
       new Ship(parseInt(split[2])),
       "horizontal"
     );
-    console.log(player1.gameboard.board);
+    showShips(player1);
   }
 });
 windowTexts();
