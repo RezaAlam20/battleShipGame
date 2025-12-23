@@ -48,7 +48,7 @@ body {
 
 .startBtn {
   width: 10vw;
-  height: 2vw;
+
   background-color: rgb(43, 148, 239);
   display: flex;
   justify-content: center;
@@ -59,15 +59,32 @@ nav {
   width: 100vw;
   height: 10vh;
   background-color: rebeccapurple;
-  display: flex;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto;
+  justify-items: center;
   align-items: center;
+}
+.container {
+  grid-column: 2/3;
+  grid-row: 1/2;
+  height: 80%;
 }
 
 .window {
-  width: 15vw;
-  height: 8vh;
   background-color: red;
+  width: 10rem;
+  height: 2rem;
+}
+#firstWin {
+  background-color: chartreuse;
+  grid-column: 1/2;
+  grid-row: 1/2;
+}
+#secondWin {
+  background-color: rgb(229, 95, 249);
+  grid-column: 3/4;
+  grid-row: 1/2;
 }
 
 .winner {
@@ -80,4 +97,17 @@ nav {
 
 .active {
   border: 10px solid black;
+}
+
+.randomBtn {
+  background-color: rgb(143, 255, 16);
+}
+
+.btn {
+  width: 10vw;
+  height: 2vw;
+}
+
+.resetBtn {
+  background-color: rgb(245, 69, 56);
 }
