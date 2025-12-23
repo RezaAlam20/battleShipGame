@@ -16,3 +16,4 @@ class Ship {
 let testShip = new Ship(5);
 
 export { testShip };
+export { Ship };

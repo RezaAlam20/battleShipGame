@@ -166,14 +166,15 @@ function compShoots() {
   let lost = player1.gameboard.allSunk();
   if (lost) {
     gameState = "end";
-    endGame();
     declarewinner(player2);
+    endGame();
     return;
   }
   let compx = Math.floor(Math.random() * 10);
   let compy = Math.floor(Math.random() * 10);
-  let square = document.querySelector(`#c${compx}${compy}`);
-  if (square.textContent != "×" || square.textContent != "○") {
+  let square = firstGrid.querySelector(`#c${compx}${compy}`);
+  if (square.textContent != "×") {
+    //changed if statement fixed bug with computer taking less shots
     player1.gameboard.receiveAttack(compx, compy);
     square.textContent = "×";
   } else {
