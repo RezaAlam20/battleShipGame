@@ -1,22 +1,33 @@
 import { dom } from "./dom.js";
 import { Ship } from "./ship.js";
 import { Player } from "./player.js";
+import { resetDom } from "./dom.js";
 
 dom();
 
 let player1 = new Player("human", "player1");
 let player2 = new Player("human", "player2");
 
-player1.gameboard.placeShip(0, 0, new Ship(1), "horizontal");
+function placetestShips() {
+  player1.gameboard.placeShip(0, 0, new Ship(1), "horizontal");
 
-player2.gameboard.placeShip(1, 3, new Ship(3), "horizontal");
-
-player2.gameboard.placeShip(3, 6, new Ship(3), "horizontal");
-console.log(player1.gameboard);
+  player2.gameboard.placeShip(0, 0, new Ship(1), "horizontal");
+}
+placetestShips();
 
 let firstGrid = document.querySelector(".firstGrid");
 let secondGrid = document.querySelector(".secondGrid");
-let currTurn = player2;
+let currTurn = undefined;
+let startBtn = document.querySelector(".startBtn");
+let content = document.querySelector(".content");
+function startGame() {
+  currTurn = player1;
+  resetDom();
+  player1.gameboard.resetBoard();
+  player2.gameboard.resetBoard();
+  placetestShips();
+}
+
 firstGrid.addEventListener("click", (e) => {
   if (currTurn == player2) {
     let coords = e.target.id;
@@ -47,6 +58,10 @@ secondGrid.addEventListener("click", (e) => {
   } else return;
 });
 
+startBtn.addEventListener("click", () => {
+  startGame();
+});
+
 function turnAlternate() {
   if (currTurn == player1) {
     currTurn = player2;
@@ -56,5 +71,10 @@ function turnAlternate() {
 }
 
 function declarewinner(player) {
-  console.log(`${player.name} is the winner`);
+  let winnerDiv = document.createElement("div");
+  winnerDiv.textContent = `${player.name} is the winner`;
+  winnerDiv.classList.add("winner");
+  content.appendChild(winnerDiv);
+
+  currTurn = undefined;
 }
