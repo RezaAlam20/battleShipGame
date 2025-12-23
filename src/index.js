@@ -8,9 +8,6 @@ dom();
 let player1 = new Player("human", "player1");
 let player2 = new Player("human", "player2");
 
-function placetestShips() {}
-placetestShips();
-
 let firstGrid = document.querySelector(".firstGrid");
 let secondGrid = document.querySelector(".secondGrid");
 let currTurn = undefined;
@@ -20,51 +17,60 @@ let randomBtn = document.querySelector(".randomBtn");
 let sumbit = document.querySelector(".submitBtn");
 let input = document.querySelector("#input");
 
+let gameState = "prep"; //prep , ingame , end
+
 function startGame() {
   currTurn = player1;
   resetDom();
   player2.gameboard.placeRandomShip();
-  placetestShips();
+
   turnAlternate();
   windowTexts();
   showShips(player1);
+  gameState = "ingame";
 }
 
 firstGrid.addEventListener("click", (e) => {
-  if (currTurn == player2) {
-    let coords = e.target.id;
-    let split = coords.split("");
-    player1.gameboard.receiveAttack(split[1], split[2]);
-    console.log(player1.gameboard.showShip(split[1], split[2]));
-    e.target.textContent = "×";
-    console.log(player1.gameboard.board);
-    turnAlternate();
-    let lost = player1.gameboard.allSunk();
-    showShips(player1);
+  if (gameState == "ingame") {
+    if (currTurn == player2) {
+      let coords = e.target.id;
+      let split = coords.split("");
+      player1.gameboard.receiveAttack(split[1], split[2]);
+      console.log(player1.gameboard.showShip(split[1], split[2]));
+      e.target.textContent = "×";
+      console.log(player1.gameboard.board);
+      turnAlternate();
+      let lost = player1.gameboard.allSunk();
+      showShips(player1);
 
-    if (lost) {
-      endGame();
-      declarewinner(player2);
-    }
-  } else return;
+      if (lost) {
+        gameState = "end";
+        endGame();
+        declarewinner(player2);
+      }
+    } else return;
+  }
 });
 
 secondGrid.addEventListener("click", (e) => {
-  if (currTurn == player1) {
-    let coords = e.target.id;
-    let split = coords.split("");
-    player2.gameboard.receiveAttack(split[1], split[2]);
-    console.log(player2.gameboard.showShip(split[1], split[2]));
-    e.target.textContent = "×";
-    turnAlternate();
-    showShips(player1);
+  if (gameState == "ingame") {
+    if (currTurn == player1) {
+      let coords = e.target.id;
+      let split = coords.split("");
+      player2.gameboard.receiveAttack(split[1], split[2]);
+      console.log(player2.gameboard.showShip(split[1], split[2]));
+      e.target.textContent = "×";
+      turnAlternate();
+      showShips(player1);
 
-    let lost = player2.gameboard.allSunk();
-    if (lost) {
-      endGame();
-      declarewinner(player1);
-    }
-  } else return;
+      let lost = player2.gameboard.allSunk();
+      if (lost) {
+        gameState = "end";
+        endGame();
+        declarewinner(player1);
+      }
+    } else return;
+  }
 });
 
 startBtn.addEventListener("click", () => {
@@ -101,31 +107,36 @@ function windowTexts() {
 }
 
 function endGame() {
+  gameState = "end";
   currTurn = undefined;
   player1.gameboard.resetBoard();
   player2.gameboard.resetBoard();
 }
 
 randomBtn.addEventListener("click", () => {
-  player1.gameboard.placeRandomShip();
-  showShips(player1);
+  if (gameState == "prep") {
+    player1.gameboard.placeRandomShip();
+    showShips(player1);
+  }
 });
 
 sumbit.addEventListener("click", (e) => {
-  e.preventDefault();
-  if (player1.gameboard.shipCount() >= 14) {
-    return;
-  } else {
-    let value = input.value;
-    let split = value.split(",");
+  if (gameState == "prep") {
+    e.preventDefault();
+    if (player1.gameboard.shipCount() >= 14) {
+      return;
+    } else {
+      let value = input.value;
+      let split = value.split(",");
 
-    player1.gameboard.placeShip(
-      parseInt(split[0]),
-      parseInt(split[1]),
-      new Ship(parseInt(split[2])),
-      "horizontal"
-    );
-    showShips(player1);
+      player1.gameboard.placeShip(
+        parseInt(split[0]),
+        parseInt(split[1]),
+        new Ship(parseInt(split[2])),
+        "horizontal"
+      );
+      showShips(player1);
+    }
   }
 });
 windowTexts();
