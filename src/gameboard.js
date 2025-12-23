@@ -1,5 +1,3 @@
-import { Ship } from "./ship";
-
 class Gameboard {
   constructor() {
     this.size = 10;
@@ -74,8 +72,12 @@ class Gameboard {
     }
     return true;
   }
+  resetBoard() {
+    this.board = [[], [], [], [], [], [], [], [], [], []];
+  }
 }
 
 let testBoard = new Gameboard();
 
 export { testBoard };
+export { Gameboard };
