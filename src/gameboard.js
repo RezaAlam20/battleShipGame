@@ -78,6 +78,7 @@ class Gameboard {
     this.board = [[], [], [], [], [], [], [], [], [], []];
   }
   placeRandomShip() {
+    this.resetBoard();
     let ship5 = new Ship(5);
     let ship4 = new Ship(4);
     let ship3 = new Ship(3);
@@ -100,6 +101,18 @@ class Gameboard {
         pos = calculatePos();
       }
     }
+  }
+
+  shipCount() {
+    let sum = 0;
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board.length; j++) {
+        if (this.board[i][j] != undefined || this.board[i][j] != null) {
+          sum++;
+        }
+      }
+    }
+    return sum;
   }
 }
 
