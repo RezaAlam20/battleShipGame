@@ -1,21 +1,10 @@
 export function dom() {}
+
 let content = document.querySelector(".content");
 let nav = document.querySelector("nav");
 let firstGrid = document.querySelector(".firstGrid");
 let secondGrid = document.querySelector(".secondGrid");
 let container = document.querySelector(".container");
-createGrid(firstGrid);
-createGrid(secondGrid);
-function createGrid(grid) {
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-      let div = document.createElement("div");
-      div.classList.add("cell");
-      div.id = `c${i}${j}`;
-      grid.appendChild(div);
-    }
-  }
-}
 
 let startBtn = document.createElement("btn");
 startBtn.classList.add("startBtn");
@@ -34,18 +23,6 @@ nav.appendChild(firstWindow);
 container.appendChild(startBtn);
 nav.appendChild(secondWindow);
 
-function resetDom() {
-  while (firstGrid.firstElementChild) {
-    firstGrid.removeChild(firstGrid.firstElementChild);
-  }
-  while (secondGrid.firstElementChild) {
-    secondGrid.removeChild(secondGrid.firstElementChild);
-  }
-
-  createGrid(firstGrid);
-  createGrid(secondGrid);
-}
-
 let randomBtn = document.createElement("div");
 randomBtn.textContent = "Random Ships";
 randomBtn.classList.add("btn");
@@ -62,7 +39,55 @@ input.innerHTML = `       <form action="">
     </form>`;
 
 input.classList.add("placeShip");
-content.appendChild(input);
+//removed the input for now
+let resetBtn = document.createElement("div");
+resetBtn.classList.add("btn");
+resetBtn.classList.add("resetBtn");
+resetBtn.textContent = "Reset Board";
+container.appendChild(resetBtn);
+
+let info = document.createElement("div");
+info.innerHTML = `<p> you can place ships as you but they have to add up to 14 squares
+thats 5 4 3 2 length ships or use the random placement</p> `;
+info.classList.add("info");
+input.appendChild(info);
+
+let wrapper = document.createElement("div");
+wrapper.classList.add("wrapper");
+
+let ship5 = document.createElement("div");
+ship5.classList.add("ship");
+ship5.classList.add("carrier");
+ship5.id = "5";
+ship5.setAttribute("draggable", "true");
+
+wrapper.appendChild(ship5);
+content.appendChild(wrapper);
+
+createGrid(firstGrid);
+createGrid(secondGrid);
+function createGrid(grid) {
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+      let div = document.createElement("div");
+      div.classList.add("cell");
+      div.id = `c${i}${j}`;
+      grid.appendChild(div);
+    }
+  }
+}
+
+function resetDom() {
+  while (firstGrid.firstElementChild) {
+    firstGrid.removeChild(firstGrid.firstElementChild);
+  }
+  while (secondGrid.firstElementChild) {
+    secondGrid.removeChild(secondGrid.firstElementChild);
+  }
+
+  createGrid(firstGrid);
+  createGrid(secondGrid);
+}
 
 function showShips(player) {
   let board = player.gameboard.board;
@@ -88,18 +113,6 @@ function showHits(player, event) {
     event.target.textContent = "○";
   }
 }
-
-let resetBtn = document.createElement("div");
-resetBtn.classList.add("btn");
-resetBtn.classList.add("resetBtn");
-resetBtn.textContent = "Reset Board";
-container.appendChild(resetBtn);
-
-let info = document.createElement("div");
-info.innerHTML = `<p> you can place ships as you but they have to add up to 14 squares
-thats 5 4 3 2 length ships or use the random placement</p> `;
-info.classList.add("info");
-input.appendChild(info);
 
 export { showHits };
 export { showShips };
