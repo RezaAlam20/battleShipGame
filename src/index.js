@@ -240,45 +240,87 @@ firstGridCells.forEach((cell) => {
 });
 
 function dragLeave(e) {
-  let coords = e.target.id;
-  let split = coords.split("");
-  for (let i = 0; i < beingDragged.id; i++) {
-    let square = firstGrid.querySelector(
-      `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
-    );
-    square.classList.remove("highlight");
+  if (currMode == "horizontal") {
+    let coords = e.target.id;
+    let split = coords.split("");
+    for (let i = 0; i < beingDragged.id; i++) {
+      let square = firstGrid.querySelector(
+        `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
+      );
+      square.classList.remove("highlight");
+    }
+  } else if (currMode == "vertical") {
+    let coords = e.target.id;
+    let split = coords.split("");
+    for (let i = 0; i < beingDragged.id; i++) {
+      let square = firstGrid.querySelector(
+        `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
+      );
+      square.classList.remove("highlight");
+    }
   }
 }
 
 function dragOver(e) {
   e.preventDefault();
-  let coords = e.target.id;
-  let split = coords.split("");
-  for (let i = 0; i < beingDragged.id; i++) {
-    let square = firstGrid.querySelector(
-      `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
-    );
-    square.classList.add("highlight");
+  if (currMode == "horizontal") {
+    let coords = e.target.id;
+    let split = coords.split("");
+    for (let i = 0; i < beingDragged.id; i++) {
+      let square = firstGrid.querySelector(
+        `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
+      );
+      square.classList.add("highlight");
+    }
+  } else if (currMode == "vertical") {
+    let coords = e.target.id;
+    let split = coords.split("");
+    for (let i = 0; i < beingDragged.id; i++) {
+      let square = firstGrid.querySelector(
+        `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
+      );
+      square.classList.add("highlight");
+    }
   }
 }
 
 function dragDrop(e) {
-  let coords = e.target.id;
-  let split = coords.split("");
-  for (let i = 0; i < beingDragged.id; i++) {
-    let square = firstGrid.querySelector(
-      `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
-    );
-    square.classList.remove("highlight");
-  }
+  if (currMode == "horizontal") {
+    let coords = e.target.id;
+    let split = coords.split("");
+    for (let i = 0; i < beingDragged.id; i++) {
+      let square = firstGrid.querySelector(
+        `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
+      );
+      square.classList.remove("highlight");
+    }
 
-  let ship = new Ship(parseInt(beingDragged.id)); // this was a headache forgot to parse it
-  let x = parseInt(split[1]);
-  let y = parseInt(split[2]);
-  let status = player1.gameboard.placeShip(x, y, ship, "horizontal");
-  if (status) {
-    beingDragged.remove();
+    let ship = new Ship(parseInt(beingDragged.id)); // this was a headache forgot to parse it
+    let x = parseInt(split[1]);
+    let y = parseInt(split[2]);
+    let status = player1.gameboard.placeShip(x, y, ship, "horizontal");
+    if (status) {
+      beingDragged.remove();
+    }
+    showShips(player1);
+  } else if (currMode == "vertical") {
+    let coords = e.target.id;
+    let split = coords.split("");
+    for (let i = 0; i < beingDragged.id; i++) {
+      let square = firstGrid.querySelector(
+        `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
+      );
+      square.classList.remove("highlight");
+    }
+
+    let ship = new Ship(parseInt(beingDragged.id)); // this was a headache forgot to parse it
+    let x = parseInt(split[1]);
+    let y = parseInt(split[2]);
+    let status = player1.gameboard.placeShip(x, y, ship, "vertical");
+    if (status) {
+      beingDragged.remove();
+    }
+    showShips(player1);
   }
-  showShips(player1);
   console.log(player1.gameboard.board);
 }
