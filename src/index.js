@@ -191,8 +191,41 @@ function compShoots() {
 windowTexts();
 
 let firstGridCells = firstGrid.querySelectorAll(".cell");
+let modeBtn = document.querySelector(".modeBtn");
 
+let wrapper = document.querySelector(".wrapper");
 let beingDragged;
+let currMode = "horizontal";
+modeBtn.addEventListener("click", () => {
+  if (currMode == "horizontal") {
+    currMode = "vertical";
+  } else {
+    currMode = "horizontal";
+  }
+  swtichShips(wrapper);
+});
+
+function swtichShips(wrapper) {
+  let nodes = wrapper.children;
+  for (let i = 0; i < nodes.length; i++) {
+    if (nodes[i].id == "mode") {
+      continue;
+    }
+    let width = nodes[i].offsetWidth;
+    let height = nodes[i].offsetHeight;
+    let newWidth = height;
+    let newHeight = width;
+    nodes[i].style.width = `${newWidth}px`;
+    nodes[i].style.height = `${newHeight}px`;
+    if (currMode == "horizontal") {
+      wrapper.classList.remove("vertical");
+      wrapper.classList.add("horizontal");
+    } else {
+      wrapper.classList.remove("horizontal");
+      wrapper.classList.add("vertical");
+    }
+  }
+}
 
 ships.forEach((ship) => {
   ship.addEventListener("dragstart", (e) => {
