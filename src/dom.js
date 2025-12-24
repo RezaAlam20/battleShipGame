@@ -61,7 +61,7 @@ input.innerHTML = `       <form action="">
       <button type="submit" class="submitBtn">submit</button>
     </form>`;
 
-input.classList.add(".placeShip");
+input.classList.add("placeShip");
 content.appendChild(input);
 
 function showShips(player) {
@@ -70,10 +70,10 @@ function showShips(player) {
     for (let j = 0; j < board.length; j++) {
       if (board[i][j] == undefined) {
         let square = firstGrid.querySelector(`#c${i}${j}`);
-        square.style.backgroundColor = " rgb(101, 101, 101)";
+        square.style.backgroundColor = " #bee3f8";
       } else if (board[i][j] != undefined || board[i][j] != null) {
         let square = firstGrid.querySelector(`#c${i}${j}`);
-        square.style.backgroundColor = "red";
+        square.style.backgroundColor = "#2d3748";
       }
     }
   }
@@ -94,6 +94,13 @@ resetBtn.classList.add("btn");
 resetBtn.classList.add("resetBtn");
 resetBtn.textContent = "Reset Board";
 container.appendChild(resetBtn);
+
+let info = document.createElement("div");
+info.innerHTML = `<p> you can place ships as you but they have to add up to 14 squares
+thats 5 4 3 2 length ships or use the random placement</p> `;
+info.classList.add("info");
+input.appendChild(info);
+
 export { showHits };
 export { showShips };
 export { resetDom };
