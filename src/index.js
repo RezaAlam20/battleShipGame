@@ -14,10 +14,10 @@ let currTurn = undefined;
 let startBtn = document.querySelector(".startBtn");
 let content = document.querySelector(".content");
 let randomBtn = document.querySelector(".randomBtn");
-let sumbit = document.querySelector(".submitBtn");
-let input = document.querySelector("#input");
+// let sumbit = document.querySelector(".submitBtn");
+// let input = document.querySelector("#input");
 let resetBtn = document.querySelector(".resetBtn");
-
+let ships = document.querySelectorAll(".ship");
 let gameState = "prep"; //prep , ingame , end
 function startGame() {
   currTurn = player1;
@@ -129,6 +129,9 @@ function endGame() {
 }
 
 randomBtn.addEventListener("click", () => {
+  for (let i = 0; i < ships.length; i++) {
+    ships[i].remove();
+  }
   if (gameState == "prep") {
     player1.gameboard.placeRandomShip();
     showShips(player1);
@@ -187,19 +190,19 @@ function compShoots() {
 
 windowTexts();
 
-let carrier = document.querySelector(".carrier");
 let firstGridCells = firstGrid.querySelectorAll(".cell");
 
 let beingDragged;
 
-carrier.addEventListener("dragstart", (e) => {
-  beingDragged = e.target;
+ships.forEach((ship) => {
+  ship.addEventListener("dragstart", (e) => {
+    beingDragged = e.target;
+  });
 });
 
 firstGridCells.forEach((cell) => {
   cell.addEventListener("dragover", dragOver);
   cell.addEventListener("drop", dragDrop);
-  // cell.addEventListener("dragenter", dragEnter);
   cell.addEventListener("dragleave", dragLeave);
 });
 
@@ -243,6 +246,6 @@ function dragDrop(e) {
   if (status) {
     beingDragged.remove();
   }
-
+  showShips(player1);
   console.log(player1.gameboard.board);
 }
