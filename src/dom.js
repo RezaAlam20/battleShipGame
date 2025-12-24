@@ -68,10 +68,6 @@ const destroyer = createShip(3, "destroyer");
 
 const patrol = createShip(2, "patrol");
 
-carrier.textContent = "Carrier";
-battleship.textContent = "battleship";
-destroyer.textContent = "destroyer";
-patrol.textContent = "patrol";
 wrapper.appendChild(carrier);
 wrapper.appendChild(battleship);
 wrapper.appendChild(destroyer);
@@ -126,6 +122,11 @@ function showHits(player, event) {
   }
 }
 
+let modeBtn = document.createElement("div");
+modeBtn.classList.add("modeBtn");
+modeBtn.classList.add("btn");
+modeBtn.id = "mode";
+wrapper.appendChild(modeBtn);
 export { showHits };
 export { showShips };
 export { resetDom };
