@@ -55,13 +55,27 @@ input.appendChild(info);
 let wrapper = document.createElement("div");
 wrapper.classList.add("wrapper");
 
-let ship5 = document.createElement("div");
-ship5.classList.add("ship");
-ship5.classList.add("carrier");
-ship5.id = "5";
-ship5.setAttribute("draggable", "true");
+function createShip(length, className) {
+  const ship = document.createElement("div");
+  ship.classList.add("ship", className);
+  ship.id = length.toString();
+  ship.draggable = true;
+  return ship;
+}
+const carrier = createShip(5, "carrier");
+const battleship = createShip(4, "battleship");
+const destroyer = createShip(3, "destroyer");
 
-wrapper.appendChild(ship5);
+const patrol = createShip(2, "patrol");
+
+carrier.textContent = "Carrier";
+battleship.textContent = "battleship";
+destroyer.textContent = "destroyer";
+patrol.textContent = "patrol";
+wrapper.appendChild(carrier);
+wrapper.appendChild(battleship);
+wrapper.appendChild(destroyer);
+wrapper.appendChild(patrol);
 content.appendChild(wrapper);
 
 createGrid(firstGrid);
@@ -93,12 +107,10 @@ function showShips(player) {
   let board = player.gameboard.board;
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board.length; j++) {
-      if (board[i][j] == undefined) {
-        let square = firstGrid.querySelector(`#c${i}${j}`);
-        square.style.backgroundColor = " #bee3f8";
-      } else if (board[i][j] != undefined || board[i][j] != null) {
-        let square = firstGrid.querySelector(`#c${i}${j}`);
-        square.style.backgroundColor = "#2d3748";
+      let square = firstGrid.querySelector(`#c${i}${j}`);
+      square.classList.remove("has-ship");
+      if (board[i][j] != undefined && board[i][j] != null) {
+        square.classList.add("has-ship");
       }
     }
   }
