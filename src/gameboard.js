@@ -13,7 +13,7 @@ class Gameboard {
       }
 
       for (let i = 0; i < ship.length; i++) {
-        if (this.board[x][y + i] != undefined) {
+        if (this.board[x][y + i] !== undefined) {
           available = false;
           break;
         }
@@ -30,7 +30,7 @@ class Gameboard {
         return false;
       }
       for (let i = 0; i < ship.length; i++) {
-        if (this.board[x + i][y] != undefined) {
+        if (this.board[x + i][y] !== undefined) {
           available = false;
           break;
         }
