@@ -143,6 +143,9 @@ sumbit.addEventListener("click", (e) => {
     } else {
       let value = input.value;
       let split = value.split(",");
+      if (split[2] > 5 || split[2] < 2) {
+        return;
+      }
 
       player1.gameboard.placeShip(
         parseInt(split[0]),
