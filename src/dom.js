@@ -126,6 +126,7 @@ let modeBtn = document.createElement("div");
 modeBtn.classList.add("modeBtn");
 modeBtn.classList.add("btn");
 modeBtn.id = "mode";
+modeBtn.textContent = "switch mode";
 wrapper.appendChild(modeBtn);
 export { showHits };
 export { showShips };
