@@ -3,6 +3,7 @@ import { Ship } from "./ship.js";
 import { Player } from "./player.js";
 import { resetDom } from "./dom.js";
 import { showShips } from "./dom.js";
+import { createShip } from "./dom.js";
 dom();
 
 let player1 = new Player("human", "player1");
@@ -17,7 +18,6 @@ let randomBtn = document.querySelector(".randomBtn");
 // let sumbit = document.querySelector(".submitBtn");
 // let input = document.querySelector("#input");
 let resetBtn = document.querySelector(".resetBtn");
-let ships = document.querySelectorAll(".ship");
 let gameState = "prep"; //prep , ingame , end
 function startGame() {
   currTurn = player1;
@@ -227,6 +227,36 @@ function swtichShips(wrapper) {
   }
 }
 
+let resetShips = document.querySelector(".resetShipsBtn");
+
+let currPrepTurn = player1;
+
+resetShips.addEventListener("click", () => {
+  currPrepTurn.gameboard.resetBoard();
+  showShips(currPrepTurn);
+
+  while (wrapper.firstElementChild) {
+    wrapper.removeChild(wrapper.firstElementChild);
+  }
+  const carrier = createShip(5, "carrier");
+  const battleship = createShip(4, "battleship");
+  const destroyer = createShip(3, "destroyer");
+  const patrol = createShip(2, "patrol");
+
+  wrapper.appendChild(carrier);
+  wrapper.appendChild(battleship);
+  wrapper.appendChild(destroyer);
+  wrapper.appendChild(patrol);
+  let ships = document.querySelectorAll(".ship");
+
+  ships.forEach((ship) => {
+    ship.addEventListener("dragstart", (e) => {
+      beingDragged = e.target;
+    });
+  });
+});
+let ships = document.querySelectorAll(".ship");
+
 ships.forEach((ship) => {
   ship.addEventListener("dragstart", (e) => {
     beingDragged = e.target;
@@ -324,3 +354,7 @@ function dragDrop(e) {
   }
   console.log(player1.gameboard.board);
 }
+
+// firstGrid.addEventListener("click", () => {
+//   console.log(currPrepTurn.gameboard);
+// });
