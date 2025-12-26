@@ -207,9 +207,6 @@ function changeMode() {
 function swtichShips(wrapper) {
   let nodes = wrapper.children;
   for (let i = 0; i < nodes.length; i++) {
-    if (nodes[i].id == "mode") {
-      continue;
-    }
     let width = nodes[i].offsetWidth;
     let height = nodes[i].offsetHeight;
     let newWidth = height;
@@ -231,6 +228,9 @@ let resetShips = document.querySelector(".resetShipsBtn");
 let currPrepTurn = player1;
 
 resetShips.addEventListener("click", () => {
+  if (currPrepTurn == undefined) {
+    return;
+  }
   currPrepTurn.gameboard.resetBoard();
   if (currPrepTurn == player1) {
     showShips(currPrepTurn, firstGrid);
@@ -336,7 +336,7 @@ function dragLeave(e) {
       let coords = e.target.id;
       let split = coords.split("");
       for (let i = 0; i < beingDragged.id; i++) {
-        let square = firstGrid.querySelector(
+        let square = secondGrid.querySelector(
           `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
         );
         if (square == null) {
