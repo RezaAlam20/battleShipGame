@@ -7,7 +7,7 @@ import { createShip } from "./dom.js";
 dom();
 
 let player1 = new Player("human", "player1");
-let player2 = new Player("computer", "Computer");
+let player2 = new Player("human", "player2");
 
 let firstGrid = document.querySelector(".firstGrid");
 let secondGrid = document.querySelector(".secondGrid");
@@ -25,7 +25,6 @@ function startGame() {
   player2.gameboard.placeRandomShip();
   turnAlternate();
   windowTexts();
-  showShips(player1);
   gameState = "ingame";
 }
 
@@ -42,7 +41,6 @@ if (player2.type == "human") {
         e.target.textContent = "×";
 
         let lost = player1.gameboard.allSunk();
-        showShips(player1);
         showHits(player1, e);
 
         if (lost) {
@@ -68,7 +66,6 @@ secondGrid.addEventListener("click", (e) => {
       player2.gameboard.receiveAttack(split[1], split[2]);
       e.target.textContent = "×";
 
-      showShips(player1);
       showHits(player2, e);
 
       let lost = player2.gameboard.allSunk();
@@ -134,7 +131,7 @@ randomBtn.addEventListener("click", () => {
   }
   if (gameState == "prep") {
     player1.gameboard.placeRandomShip();
-    showShips(player1);
+    showShips(player1, firstGrid);
   }
 });
 
@@ -192,19 +189,21 @@ windowTexts();
 
 let firstGridCells = firstGrid.querySelectorAll(".cell");
 let modeBtn = document.querySelector(".modeBtn");
-
+let secondGridCells = secondGrid.querySelectorAll(".cell");
 let wrapper = document.querySelector(".wrapper");
 let beingDragged;
 let currMode = "horizontal";
 modeBtn.addEventListener("click", () => {
+  changeMode();
+  swtichShips(wrapper);
+});
+function changeMode() {
   if (currMode == "horizontal") {
     currMode = "vertical";
   } else {
     currMode = "horizontal";
   }
-  swtichShips(wrapper);
-});
-
+}
 function swtichShips(wrapper) {
   let nodes = wrapper.children;
   for (let i = 0; i < nodes.length; i++) {
@@ -233,7 +232,12 @@ let currPrepTurn = player1;
 
 resetShips.addEventListener("click", () => {
   currPrepTurn.gameboard.resetBoard();
-  showShips(currPrepTurn);
+  if (currPrepTurn == player1) {
+    showShips(currPrepTurn, firstGrid);
+  }
+  if (currPrepTurn == player2) {
+    showShips(currPrepTurn, secondGrid);
+  }
 
   while (wrapper.firstElementChild) {
     wrapper.removeChild(wrapper.firstElementChild);
@@ -263,98 +267,269 @@ ships.forEach((ship) => {
   });
 });
 
-firstGridCells.forEach((cell) => {
-  cell.addEventListener("dragover", dragOver);
-  cell.addEventListener("drop", dragDrop);
-  cell.addEventListener("dragleave", dragLeave);
-});
+if (player2.type == "human") {
+  firstGridCells.forEach((cell) => {
+    cell.addEventListener("dragover", dragOver);
+    cell.addEventListener("drop", dragDrop);
+    cell.addEventListener("dragleave", dragLeave);
+  });
+  secondGridCells.forEach((cell) => {
+    cell.addEventListener("dragover", dragOver);
+    cell.addEventListener("drop", dragDrop);
+    cell.addEventListener("dragleave", dragLeave);
+  });
+} else if ((player2.type = "computer")) {
+  firstGridCells.forEach((cell) => {
+    cell.addEventListener("dragover", dragOver);
+    cell.addEventListener("drop", dragDrop);
+    cell.addEventListener("dragleave", dragLeave);
+  });
+}
 
 function dragLeave(e) {
-  if (currMode == "horizontal") {
-    let coords = e.target.id;
-    let split = coords.split("");
-    for (let i = 0; i < beingDragged.id; i++) {
-      let square = firstGrid.querySelector(
-        `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
-      );
-      square.classList.remove("highlight");
+  if (currPrepTurn == player1) {
+    if (currMode == "horizontal") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = firstGrid.querySelector(
+          `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.remove("highlight");
+      }
+    } else if (currMode == "vertical") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = firstGrid.querySelector(
+          `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.remove("highlight");
+      }
     }
-  } else if (currMode == "vertical") {
-    let coords = e.target.id;
-    let split = coords.split("");
-    for (let i = 0; i < beingDragged.id; i++) {
-      let square = firstGrid.querySelector(
-        `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
-      );
-      square.classList.remove("highlight");
+  } else if (currPrepTurn == player2) {
+    if (currMode == "horizontal") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = secondGrid.querySelector(
+          `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.remove("highlight");
+      }
+    } else if (currMode == "vertical") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = firstGrid.querySelector(
+          `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.remove("highlight");
+      }
     }
   }
 }
 
 function dragOver(e) {
   e.preventDefault();
-  if (currMode == "horizontal") {
-    let coords = e.target.id;
-    let split = coords.split("");
-    for (let i = 0; i < beingDragged.id; i++) {
-      let square = firstGrid.querySelector(
-        `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
-      );
-      square.classList.add("highlight");
+  if (currPrepTurn == player1) {
+    if (currMode == "horizontal") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = firstGrid.querySelector(
+          `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.add("highlight");
+      }
+    } else if (currMode == "vertical") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = firstGrid.querySelector(
+          `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.add("highlight");
+      }
     }
-  } else if (currMode == "vertical") {
-    let coords = e.target.id;
-    let split = coords.split("");
-    for (let i = 0; i < beingDragged.id; i++) {
-      let square = firstGrid.querySelector(
-        `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
-      );
-      square.classList.add("highlight");
+  } else if (currPrepTurn == player2) {
+    if (currMode == "horizontal") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = secondGrid.querySelector(
+          `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.add("highlight");
+      }
+    } else if (currMode == "vertical") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = secondGrid.querySelector(
+          `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.add("highlight");
+      }
     }
   }
 }
 
 function dragDrop(e) {
-  if (currMode == "horizontal") {
-    let coords = e.target.id;
-    let split = coords.split("");
-    for (let i = 0; i < beingDragged.id; i++) {
-      let square = firstGrid.querySelector(
-        `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
-      );
-      square.classList.remove("highlight");
-    }
+  if (currPrepTurn == player1) {
+    if (currMode == "horizontal") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = firstGrid.querySelector(
+          `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.remove("highlight");
+      }
 
-    let ship = new Ship(parseInt(beingDragged.id)); // this was a headache forgot to parse it
-    let x = parseInt(split[1]);
-    let y = parseInt(split[2]);
-    let status = player1.gameboard.placeShip(x, y, ship, "horizontal");
-    if (status) {
-      beingDragged.remove();
-    }
-    showShips(player1);
-  } else if (currMode == "vertical") {
-    let coords = e.target.id;
-    let split = coords.split("");
-    for (let i = 0; i < beingDragged.id; i++) {
-      let square = firstGrid.querySelector(
-        `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
-      );
-      square.classList.remove("highlight");
-    }
+      let ship = new Ship(parseInt(beingDragged.id)); // this was a headache forgot to parse it
+      let x = parseInt(split[1]);
+      let y = parseInt(split[2]);
+      let status = currPrepTurn.gameboard.placeShip(x, y, ship, "horizontal");
+      if (status) {
+        beingDragged.remove();
+      }
+      showShips(currPrepTurn, firstGrid);
+    } else if (currMode == "vertical") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = firstGrid.querySelector(
+          `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.remove("highlight");
+      }
 
-    let ship = new Ship(parseInt(beingDragged.id)); // this was a headache forgot to parse it
-    let x = parseInt(split[1]);
-    let y = parseInt(split[2]);
-    let status = player1.gameboard.placeShip(x, y, ship, "vertical");
-    if (status) {
-      beingDragged.remove();
+      let ship = new Ship(parseInt(beingDragged.id)); // this was a headache forgot to parse it
+      let x = parseInt(split[1]);
+      let y = parseInt(split[2]);
+      let status = currPrepTurn.gameboard.placeShip(x, y, ship, "vertical");
+      if (status) {
+        beingDragged.remove();
+      }
+      showShips(currPrepTurn, firstGrid);
     }
-    showShips(player1);
+    console.log(currPrepTurn.gameboard.board);
+  } else if (currPrepTurn == player2) {
+    if (currMode == "horizontal") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = secondGrid.querySelector(
+          `#c${parseInt(split[1])}${parseInt(split[2]) + i}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.remove("highlight");
+      }
+
+      let ship = new Ship(parseInt(beingDragged.id)); // this was a headache forgot to parse it
+      let x = parseInt(split[1]);
+      let y = parseInt(split[2]);
+      let status = currPrepTurn.gameboard.placeShip(x, y, ship, "horizontal");
+      if (status) {
+        beingDragged.remove();
+      }
+      showShips(currPrepTurn, secondGrid);
+    } else if (currMode == "vertical") {
+      let coords = e.target.id;
+      let split = coords.split("");
+      for (let i = 0; i < beingDragged.id; i++) {
+        let square = secondGrid.querySelector(
+          `#c${parseInt(split[1]) + i}${parseInt(split[2])}`
+        );
+        if (square == null) {
+          return;
+        }
+        square.classList.remove("highlight");
+      }
+
+      let ship = new Ship(parseInt(beingDragged.id)); // this was a headache forgot to parse it
+      let x = parseInt(split[1]);
+      let y = parseInt(split[2]);
+      let status = currPrepTurn.gameboard.placeShip(x, y, ship, "vertical");
+      if (status) {
+        beingDragged.remove();
+      }
+      showShips(currPrepTurn, secondGrid);
+    }
+    console.log(currPrepTurn.gameboard.board);
   }
-  console.log(player1.gameboard.board);
 }
 
-// firstGrid.addEventListener("click", () => {
-//   console.log(currPrepTurn.gameboard);
-// });
+let confirmShips = document.querySelector(".confirmShips");
+
+confirmShips.addEventListener("click", () => {
+  if (currPrepTurn == player1) {
+    if (currPrepTurn.gameboard.shipCount() < 14) {
+      alert("place more ships");
+    } else {
+      currPrepTurn = player2;
+
+      while (wrapper.firstElementChild) {
+        wrapper.removeChild(wrapper.firstElementChild);
+      }
+      const carrier = createShip(5, "carrier");
+      const battleship = createShip(4, "battleship");
+      const destroyer = createShip(3, "destroyer");
+      const patrol = createShip(2, "patrol");
+
+      wrapper.appendChild(carrier);
+      wrapper.appendChild(battleship);
+      wrapper.appendChild(destroyer);
+      wrapper.appendChild(patrol);
+      let ships = document.querySelectorAll(".ship");
+
+      ships.forEach((ship) => {
+        ship.addEventListener("dragstart", (e) => {
+          beingDragged = e.target;
+        });
+      });
+      currMode = "horizontal";
+      wrapper.classList.remove("vertical");
+      wrapper.classList.add("horizontal");
+    }
+  } else if (currPrepTurn == player2) {
+    if (currPrepTurn.gameboard.shipCount() < 14) {
+      alert("place more ships");
+    } else {
+      currPrepTurn = undefined;
+    }
+  }
+});
