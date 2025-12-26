@@ -62,10 +62,10 @@ function createShip(length, className) {
   ship.draggable = true;
   return ship;
 }
+
 const carrier = createShip(5, "carrier");
 const battleship = createShip(4, "battleship");
 const destroyer = createShip(3, "destroyer");
-
 const patrol = createShip(2, "patrol");
 
 wrapper.appendChild(carrier);
@@ -127,7 +127,17 @@ modeBtn.classList.add("modeBtn");
 modeBtn.classList.add("btn");
 modeBtn.id = "mode";
 modeBtn.textContent = "switch mode";
-wrapper.appendChild(modeBtn);
+let resetShips = document.createElement("div");
+resetShips.classList.add("btn");
+resetShips.classList.add("resetShipsBtn");
+resetShips.textContent = "resetShips";
+let btnContainer = document.createElement("div");
+btnContainer.classList.add("btnContainer");
+content.appendChild(btnContainer);
+btnContainer.appendChild(resetShips);
+btnContainer.appendChild(modeBtn);
+
 export { showHits };
 export { showShips };
 export { resetDom };
+export { createShip };
