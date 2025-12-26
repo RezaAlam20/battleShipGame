@@ -288,6 +288,9 @@ if (player2.type == "human") {
 
 function dragLeave(e) {
   if (currPrepTurn == player1) {
+    if (e.target.classList[1] != "first") {
+      return;
+    }
     if (currMode == "horizontal") {
       let coords = e.target.id;
       let split = coords.split("");
@@ -314,6 +317,9 @@ function dragLeave(e) {
       }
     }
   } else if (currPrepTurn == player2) {
+    if (e.target.classList[1] != "second") {
+      return;
+    }
     if (currMode == "horizontal") {
       let coords = e.target.id;
       let split = coords.split("");
@@ -345,6 +351,9 @@ function dragLeave(e) {
 function dragOver(e) {
   e.preventDefault();
   if (currPrepTurn == player1) {
+    if (e.target.classList[1] != "first") {
+      return;
+    }
     if (currMode == "horizontal") {
       let coords = e.target.id;
       let split = coords.split("");
@@ -371,6 +380,9 @@ function dragOver(e) {
       }
     }
   } else if (currPrepTurn == player2) {
+    if (e.target.classList[1] != "second") {
+      return;
+    }
     if (currMode == "horizontal") {
       let coords = e.target.id;
       let split = coords.split("");
@@ -401,6 +413,9 @@ function dragOver(e) {
 
 function dragDrop(e) {
   if (currPrepTurn == player1) {
+    if (e.target.classList[1] != "first") {
+      return;
+    }
     if (currMode == "horizontal") {
       let coords = e.target.id;
       let split = coords.split("");
@@ -446,6 +461,9 @@ function dragDrop(e) {
     }
     console.log(currPrepTurn.gameboard.board);
   } else if (currPrepTurn == player2) {
+    if (e.target.classList[1] != "second") {
+      return;
+    }
     if (currMode == "horizontal") {
       let coords = e.target.id;
       let split = coords.split("");
