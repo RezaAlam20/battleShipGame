@@ -1,4 +1,4 @@
-import { dom, showHits } from "./dom.js";
+import { dom, hideShips, showHits } from "./dom.js";
 import { Ship } from "./ship.js";
 import { Player } from "./player.js";
 import { resetDom } from "./dom.js";
@@ -22,7 +22,6 @@ let gameState = "prep"; //prep , ingame , end
 function startGame() {
   currTurn = player1;
   resetDom();
-  player2.gameboard.placeRandomShip();
   turnAlternate();
   windowTexts();
   gameState = "ingame";
@@ -78,10 +77,14 @@ secondGrid.addEventListener("click", (e) => {
       turnAlternate();
     } else return;
   }
+  console.log(player2.gameboard.board);
 });
 
 startBtn.addEventListener("click", () => {
-  if (player1.gameboard.shipCount() < 14) {
+  if (
+    player1.gameboard.shipCount() < 14 ||
+    player2.gameboard.shipCount() < 14
+  ) {
     alert("place some ships");
   } else {
     startGame();
@@ -124,16 +127,6 @@ function endGame() {
   player1.gameboard.resetBoard();
   player2.gameboard.resetBoard();
 }
-
-randomBtn.addEventListener("click", () => {
-  for (let i = 0; i < ships.length; i++) {
-    ships[i].remove();
-  }
-  if (gameState == "prep") {
-    player1.gameboard.placeRandomShip();
-    showShips(player1, firstGrid);
-  }
-});
 
 // sumbit.addEventListener("click", (e) => {
 //   if (gameState == "prep") {
@@ -542,12 +535,29 @@ confirmShips.addEventListener("click", () => {
       currMode = "horizontal";
       wrapper.classList.remove("vertical");
       wrapper.classList.add("horizontal");
+      hideShips(player1, firstGrid);
     }
   } else if (currPrepTurn == player2) {
     if (currPrepTurn.gameboard.shipCount() < 14) {
       alert("place more ships");
     } else {
       currPrepTurn = undefined;
+      hideShips(player2, secondGrid);
+    }
+  }
+});
+
+randomBtn.addEventListener("click", () => {
+  let ships = document.querySelectorAll(".ship");
+  for (let i = 0; i < ships.length; i++) {
+    ships[i].remove();
+  }
+  if (gameState == "prep") {
+    currPrepTurn.gameboard.placeRandomShip();
+    if (currPrepTurn == player1) {
+      showShips(currPrepTurn, firstGrid);
+    } else {
+      showShips(currPrepTurn, secondGrid);
     }
   }
 });
