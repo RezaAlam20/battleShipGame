@@ -112,6 +112,16 @@ function showShips(player, grid) {
   }
 }
 
+function hideShips(player, grid) {
+  let board = player.gameboard.board;
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board.length; j++) {
+      let square = grid.querySelector(`#c${i}${j}`);
+      square.classList.remove("has-ship");
+    }
+  }
+}
+
 function showHits(player, event) {
   let board = player.gameboard.board;
   let id = event.target.id;
@@ -146,3 +156,4 @@ export { showHits };
 export { showShips };
 export { resetDom };
 export { createShip };
+export { hideShips };
