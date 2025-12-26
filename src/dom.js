@@ -73,14 +73,15 @@ wrapper.appendChild(destroyer);
 wrapper.appendChild(patrol);
 content.appendChild(wrapper);
 
-createGrid(firstGrid);
-createGrid(secondGrid);
-function createGrid(grid) {
+createGrid(firstGrid, "first");
+createGrid(secondGrid, "second");
+function createGrid(grid, marker) {
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
       let div = document.createElement("div");
       div.classList.add("cell");
       div.id = `c${i}${j}`;
+      div.classList.add(marker);
       grid.appendChild(div);
     }
   }
@@ -94,8 +95,8 @@ function resetDom() {
     secondGrid.removeChild(secondGrid.firstElementChild);
   }
 
-  createGrid(firstGrid);
-  createGrid(secondGrid);
+  createGrid(firstGrid, "first");
+  createGrid(secondGrid, "second");
 }
 
 function showShips(player, grid) {
