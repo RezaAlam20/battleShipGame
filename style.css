@@ -213,7 +213,7 @@ nav {
 }
 
 .active {
-  box-shadow: var(--glow-active);
+  border: 5px solid var(--active-turn);
 }
 
 .randomBtn {
@@ -255,6 +255,7 @@ nav {
   grid-template-rows: repeat(auto, 6);
   justify-items: center;
   align-items: center;
+  border-radius: 20px;
 }
 
 .wrapper.horizontal {
@@ -302,7 +303,7 @@ nav {
 .modeBtn {
   width: 250px;
   height: 50px;
-  background-color: red;
+  background-color: var(--navy-blue);
   align-self: flex-end;
   margin: 20px;
   display: flex;
@@ -314,7 +315,7 @@ nav {
 .resetShipsBtn {
   width: 250px;
   height: 50px;
-  background-color: red;
+  background-color: var(--btn-reset);
   align-self: flex-end;
   margin: 20px;
   display: flex;
@@ -336,43 +337,68 @@ nav {
   z-index: 1;
   width: 100vw;
   height: 100vh;
-  background-color: red;
-  opacity: 0.8;
+  background-color: var(--navy-blue);
   top: 0;
   left: 0;
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 200px;
+  font-size: 25px;
+  color: var(--text-light);
 }
-
+.nameSubmit {
+  width: 80%;
+  height: 25px;
+  align-self: center;
+  border-radius: 10px;
+  border: 2px solid var(--ocean-border);
+  color: var(--text-dark);
+  font-weight: bold;
+}
+input {
+  width: 200px;
+  height: 25px;
+  border: 5px solid var(--ocean-border);
+  border-radius: 10px;
+  padding-left: 10px;
+}
+.information {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .option {
-  background-color: blue;
-  border: 2px solid black;
+  background-color: var(--ocean-cell);
+  border: 5px solid var(--ocean-border);
   width: 200px;
   height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: var(--text-dark);
+  font-weight: bold;
 }
 
 .btnContainer {
-  background-color: blue;
+  background-color: var(--bg-dark);
   width: auto;
   height: auto;
   grid-row: 3/4;
+  border-radius: 20px;
 }
-
+.btnContainer > div {
+  border-radius: 20px;
+}
 .confirmShips {
   width: 250px;
   height: 50px;
-  background-color: red;
+  background-color: var(--bg-secondary);
   align-self: flex-end;
   margin: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--text-light);
+  color: var(--text-dark);
   font-size: 20px;
 }
