@@ -23,8 +23,11 @@ function startGame() {
   currTurn = player1;
   resetDom();
   turnAlternate();
-  windowTexts();
   gameState = "ingame";
+  if (player2.type == "computer") {
+    player2.gameboard.placeRandomShip();
+    showShips(player1, firstGrid);
+  }
 }
 
 if (player2.type == "human") {
@@ -81,13 +84,21 @@ secondGrid.addEventListener("click", (e) => {
 });
 
 startBtn.addEventListener("click", () => {
-  if (
-    player1.gameboard.shipCount() < 14 ||
-    player2.gameboard.shipCount() < 14
-  ) {
-    alert("place some ships");
+  if (player2.type == "human") {
+    if (
+      player1.gameboard.shipCount() < 14 ||
+      player2.gameboard.shipCount() < 14
+    ) {
+      alert("place some ships");
+    } else {
+      startGame();
+    }
   } else {
-    startGame();
+    if (player1.gameboard.shipCount() < 14) {
+      alert("place some ships");
+    } else {
+      startGame();
+    }
   }
 });
 
@@ -452,7 +463,6 @@ function dragDrop(e) {
       }
       showShips(currPrepTurn, firstGrid);
     }
-    console.log(currPrepTurn.gameboard.board);
   } else if (currPrepTurn == player2) {
     if (e.target.classList[1] != "second") {
       return;
@@ -500,7 +510,6 @@ function dragDrop(e) {
       }
       showShips(currPrepTurn, secondGrid);
     }
-    console.log(currPrepTurn.gameboard.board);
   }
 }
 
@@ -511,7 +520,11 @@ confirmShips.addEventListener("click", () => {
     if (currPrepTurn.gameboard.shipCount() < 14) {
       alert("place more ships");
     } else {
-      currPrepTurn = player2;
+      if (player2.type == "computer") {
+        currPrepTurn = undefined;
+      } else {
+        currPrepTurn = player2;
+      }
 
       while (wrapper.firstElementChild) {
         wrapper.removeChild(wrapper.firstElementChild);
@@ -560,4 +573,68 @@ randomBtn.addEventListener("click", () => {
       showShips(currPrepTurn, secondGrid);
     }
   }
+});
+
+let gameMode = document.querySelector(".gamemode");
+let compBtn = document.querySelector(".computer");
+let humanBtn = document.querySelector(".human");
+
+compBtn.addEventListener("click", () => {
+  player2.type = "computer";
+  player2.name = "computer";
+  while (gameMode.firstElementChild) {
+    gameMode.removeChild(gameMode.firstElementChild);
+  }
+  let information = document.createElement("div");
+  information.innerHTML = `    <div class="information">
+      <div>
+        <label for="name1">Player one Name : 
+          <input type="text" id="name1"  />
+        </label>
+      </div>
+      <button class="nameSubmit">submit</button>
+    </div>`;
+  gameMode.appendChild(information);
+
+  let nameSubmit = document.querySelector(".nameSubmit");
+  let name1 = document.querySelector("#name1");
+  nameSubmit.addEventListener("click", () => {
+    player1.name = name1.value;
+    gameMode.remove();
+    console.log(player1.name);
+    windowTexts();
+  });
+});
+
+humanBtn.addEventListener("click", () => {
+  player2.type = "human";
+  while (gameMode.firstElementChild) {
+    gameMode.removeChild(gameMode.firstElementChild);
+  }
+  let information = document.createElement("div");
+  information.innerHTML = `    <div class="information">
+      <div>
+        <label for="name1">Player one Name : 
+          <input type="text" id="name1"  />
+        </label>
+      </div>
+      <div>
+        <label for="name2">
+        Player two Name :
+          <input type="text" id="name2" />
+        </label>
+      </div>
+      <button class="nameSubmit">submit</button>
+    </div>`;
+  gameMode.appendChild(information);
+
+  let nameSubmit = document.querySelector(".nameSubmit");
+  let name1 = document.querySelector("#name1");
+  let name2 = document.querySelector("#name2");
+  nameSubmit.addEventListener("click", () => {
+    player1.name = name1.value;
+    player2.name = name2.value;
+    gameMode.remove();
+    windowTexts();
+  });
 });
