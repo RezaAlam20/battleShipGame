@@ -62,7 +62,6 @@ function createShip(length, className) {
   ship.draggable = true;
   return ship;
 }
-
 const carrier = createShip(5, "carrier");
 const battleship = createShip(4, "battleship");
 const destroyer = createShip(3, "destroyer");
@@ -99,11 +98,11 @@ function resetDom() {
   createGrid(secondGrid);
 }
 
-function showShips(player) {
+function showShips(player, grid) {
   let board = player.gameboard.board;
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board.length; j++) {
-      let square = firstGrid.querySelector(`#c${i}${j}`);
+      let square = grid.querySelector(`#c${i}${j}`);
       square.classList.remove("has-ship");
       if (board[i][j] != undefined && board[i][j] != null) {
         square.classList.add("has-ship");
@@ -136,6 +135,11 @@ btnContainer.classList.add("btnContainer");
 content.appendChild(btnContainer);
 btnContainer.appendChild(resetShips);
 btnContainer.appendChild(modeBtn);
+let confirmShips = document.createElement("div");
+confirmShips.classList.add("confirmShips");
+confirmShips.classList.add("btn");
+confirmShips.textContent = "confirm ships";
+btnContainer.appendChild(confirmShips);
 
 export { showHits };
 export { showShips };
