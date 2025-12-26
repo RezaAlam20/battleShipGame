@@ -94,14 +94,14 @@
 }
 body {
   font-family: "Comic Relief";
-  height: 100%;
-  width: 100vw;
+  min-height: 100vh;
+  min-width: 100vw;
   background: linear-gradient(var(--bg-primary), var(--bg-secondary));
   color: var(--text-dark);
 }
 
 .content {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   display: grid;
   grid-template-columns: auto auto auto;
@@ -252,7 +252,7 @@ nav {
   grid-column: 1/2;
   grid-row: 2/3;
   display: grid;
-  grid-template-rows: repeat(auto, 5);
+  grid-template-rows: repeat(auto, 6);
   justify-items: center;
   align-items: center;
 }
@@ -303,7 +303,18 @@ nav {
   width: 250px;
   height: 50px;
   background-color: red;
-  grid-row: 5/6;
+  align-self: flex-end;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-light);
+  font-size: 20px;
+}
+.resetShipsBtn {
+  width: 250px;
+  height: 50px;
+  background-color: red;
   align-self: flex-end;
   margin: 20px;
   display: flex;
@@ -318,4 +329,50 @@ nav {
 }
 .has-ship {
   background-color: var(--ship-color);
+}
+
+.gamemode {
+  position: absolute;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  background-color: red;
+  opacity: 0.8;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 200px;
+}
+
+.option {
+  background-color: blue;
+  border: 2px solid black;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-dark);
+}
+
+.btnContainer {
+  background-color: blue;
+  width: auto;
+  height: auto;
+  grid-row: 3/4;
+}
+
+.confirmShips {
+  width: 250px;
+  height: 50px;
+  background-color: red;
+  align-self: flex-end;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-light);
+  font-size: 20px;
 }
