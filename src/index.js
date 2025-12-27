@@ -162,13 +162,6 @@ function endGame() {
 //   }
 // });
 
-resetBtn.addEventListener("click", () => {
-  player1.gameboard.resetBoard();
-  player2.gameboard.resetBoard();
-  resetDom();
-  gameState = "prep";
-});
-
 function compShoots() {
   let lost = player1.gameboard.allSunk();
   if (lost) {
@@ -192,8 +185,9 @@ function compShoots() {
 windowTexts();
 
 let firstGridCells = firstGrid.querySelectorAll(".cell");
-let modeBtn = document.querySelector(".modeBtn");
+
 let secondGridCells = secondGrid.querySelectorAll(".cell");
+let modeBtn = document.querySelector(".modeBtn");
 let wrapper = document.querySelector(".wrapper");
 let beingDragged;
 let currMode = "horizontal";
@@ -271,24 +265,27 @@ ships.forEach((ship) => {
   });
 });
 
-if (player2.type == "human") {
-  firstGridCells.forEach((cell) => {
-    cell.addEventListener("dragover", dragOver);
-    cell.addEventListener("drop", dragDrop);
-    cell.addEventListener("dragleave", dragLeave);
-  });
-  secondGridCells.forEach((cell) => {
-    cell.addEventListener("dragover", dragOver);
-    cell.addEventListener("drop", dragDrop);
-    cell.addEventListener("dragleave", dragLeave);
-  });
-} else if ((player2.type = "computer")) {
-  firstGridCells.forEach((cell) => {
-    cell.addEventListener("dragover", dragOver);
-    cell.addEventListener("drop", dragDrop);
-    cell.addEventListener("dragleave", dragLeave);
-  });
+function AddDragEvents(firstGridCells, secondGridCells) {
+  if (player2.type == "human") {
+    firstGridCells.forEach((cell) => {
+      cell.addEventListener("dragover", dragOver);
+      cell.addEventListener("drop", dragDrop);
+      cell.addEventListener("dragleave", dragLeave);
+    });
+    secondGridCells.forEach((cell) => {
+      cell.addEventListener("dragover", dragOver);
+      cell.addEventListener("drop", dragDrop);
+      cell.addEventListener("dragleave", dragLeave);
+    });
+  } else if ((player2.type = "computer")) {
+    firstGridCells.forEach((cell) => {
+      cell.addEventListener("dragover", dragOver);
+      cell.addEventListener("drop", dragDrop);
+      cell.addEventListener("dragleave", dragLeave);
+    });
+  }
 }
+AddDragEvents(firstGridCells, secondGridCells);
 
 function dragLeave(e) {
   if (currPrepTurn == player1) {
@@ -637,4 +634,17 @@ humanBtn.addEventListener("click", () => {
     gameMode.remove();
     windowTexts();
   });
+});
+
+resetBtn.addEventListener("click", () => {
+  player1.gameboard.resetBoard();
+  player2.gameboard.resetBoard();
+  resetDom();
+
+  let firstGridCells = firstGrid.querySelectorAll(".cell");
+
+  let secondGridCells = secondGrid.querySelectorAll(".cell");
+  AddDragEvents(firstGridCells, secondGridCells);
+  gameState = "prep";
+  currPrepTurn = player1;
 });
